@@ -1,0 +1,26 @@
+{{- "<|im_start|>system\n" }}
+{%- if messages[0]['role'] == 'system' %}
+  {{- messages[0]['content'] | trim + "\n" }}
+  {%- set messages = messages[1:] %}
+{%- else %}
+  {{- "You are a Salesforce xLAM tool-use assistant. When tools are needed, emit one JSON array of objects with name and arguments. Ask for missing required values and wait for tool results before claiming completion.\n" }}
+{%- endif %}
+{%- if tools is not none %}
+  {{- "Available tools:\n" }}
+  {%- for func in tools %}{{- func | tojson(indent=2) + "\n" }}{%- endfor %}
+{%- endif %}
+{{- "<|im_end|>\n" }}
+{%- for message in messages %}
+  {%- if message['role'] == 'tool' %}
+    {{- "<|im_start|>tool\n" }}
+    {%- if message.content is mapping or message.content is iterable and message.content is not string %}{{- message.content | tojson }}{%- else %}{{- message.content }}{%- endif %}
+    {{- "<|im_end|>\n" }}
+  {%- elif 'tool_calls' in message %}
+    {{- "<|im_start|>assistant\n[" }}
+    {%- for call in message.tool_calls %}{{- call.function | tojson }}{%- if not loop.last %}{{- ", " }}{%- endif %}{%- endfor %}
+    {{- "]<|im_end|>\n" }}
+  {%- else %}
+    {{- "<|im_start|>" + message.role + "\n" + message.content | trim + "<|im_end|>\n" }}
+  {%- endif %}
+{%- endfor %}
+{%- if add_generation_prompt %}{{- "<|im_start|>assistant\n" }}{%- endif %}
