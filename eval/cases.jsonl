@@ -1,0 +1,4 @@
+{"id":"get-order","prompt":"Show me order ORD-1001.","expected_tool":"get_order","expected_arguments":{"order_id":"ORD-1001"}}
+{"id":"inventory","prompt":"How many units of KB-75 are available?","expected_tool":"check_inventory","expected_arguments":{"sku":"KB-75"}}
+{"id":"find-orders","prompt":"List the orders for alice@example.com.","expected_tool":"find_orders","expected_arguments":{"customer_email":"alice@example.com"}}
+{"id":"clarify-missing-id","prompt":"Cancel my order.","expected_tool":null,"content_should_contain_any":["order","ID","identifier","which"]}

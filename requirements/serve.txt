@@ -1,0 +1,3 @@
+# vLLM and its out-of-tree bitsandbytes plugin are isolated from the training env.
+vllm==0.28.0
+git+https://github.com/vllm-project/vllm-bnb-plugin.git@d4914a9e3c5927b33b7ef941385a4fda2187e2b9

@@ -1,0 +1,9 @@
+# A reproducible single-A100 training environment. For a different CUDA wheel,
+# install torch first from the official PyTorch index, then install the rest.
+torch==2.13.0
+accelerate==1.14.0
+bitsandbytes==0.50.2
+datasets==5.0.1
+peft==0.20.0
+tensorboard>=2.20,<3
+transformers==5.16.1

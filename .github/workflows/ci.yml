@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m compileall -q src scripts examples eval tests
+      - run: python -m ruff check .
+      - run: python -m pytest
+      - run: xlam2-train --config configs/a100_40gb_smoke.yaml --validate-only
+      - run: xlam2-agent demo
